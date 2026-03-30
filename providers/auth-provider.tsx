@@ -9,7 +9,6 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   const [profile, setProfile] = useState<any>();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetch the claims once, and subscribe to auth state changes
   useEffect(() => {
     const fetchClaims = async () => {
       setIsLoading(true);
@@ -29,9 +28,23 @@ export default function AuthProvider({ children }: PropsWithChildren) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, _session) => {
-      console.log("Auth state changed:", { event: _event });
+      setIsLoading(true);
+
+      if (_event === "SIGNED_OUT") {
+        setClaims(null);
+        setProfile(null);
+        setIsLoading(false);
+        return;
+      }
+
       const { data } = await supabase.auth.getClaims();
-      setClaims(data?.claims ?? null);
+      const newClaims = data?.claims ?? null;
+      setClaims(newClaims);
+
+      if (!newClaims) {
+        setProfile(null);
+        setIsLoading(false);
+      }
     });
 
     // Cleanup subscription on unmount
@@ -69,7 +82,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         claims,
         isLoading,
         profile,
-        isLoggedIn: claims != undefined,
+        isLoggedIn: !!claims,
       }}
     >
       {children}
