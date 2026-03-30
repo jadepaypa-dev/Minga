@@ -32,7 +32,7 @@ export default function Signup() {
         <View className="mt-4">
           <TextInput placeholder="Name" value={name} onChangeText={setName} />
           <TextInput
-            placeholder="Email"
+            placeholder="Email/Username"
             value={email}
             onChangeText={setEmail}
           />
