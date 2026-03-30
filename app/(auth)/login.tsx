@@ -1,8 +1,7 @@
 import { supabase } from "@/lib/supabase";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Image, Pressable, Text, TextInput, View } from "react-native";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -21,8 +20,15 @@ export default function Login() {
   };
 
   return (
-    <SafeAreaView className="flex-1">
-      <View className="flex-1 justify-center items-center bg-white">
+    <View className="flex-1 items-center bg-white gap-10">
+      <View className="flex w-[100%] h-[50%] rounded-b-xl overflow-hidden">
+        <Image
+          source={require("@/assets/images/auth-image.jpg")}
+          style={{ width: "auto", height: "100%", marginBottom: 32 }}
+          resizeMode="cover"
+        />
+      </View>
+      <View className="flex gap-2">
         <Text className="text-2xl">Login Screen</Text>
         <View className="mt-4">
           <TextInput
@@ -53,6 +59,6 @@ export default function Login() {
           </Link>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
