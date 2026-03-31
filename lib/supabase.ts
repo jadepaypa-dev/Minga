@@ -1,29 +1,72 @@
+// import { createClient } from "@supabase/supabase-js";
+// import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
+
+// const ExpoSecureStoreAdapter = {
+//   getItem: (key: string) => {
+//     return getItemAsync(key);
+//   },
+//   setItem: (key: string, value: string) => {
+//     if (value.length > 2048) {
+//       console.warn(
+//         "Value being stored in SecureStore is larger than 2048 bytes and it may not be stored successfully. In a future SDK version, this call may throw an error.",
+//       );
+//     }
+//     return setItemAsync(key, value);
+//   },
+//   removeItem: (key: string) => {
+//     return deleteItemAsync(key);
+//   },
+// };
+
+// export const supabase = createClient(
+//   process.env.EXPO_PUBLIC_SUPABASE_URL ?? "",
+//   process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? "",
+//   {
+//     auth: {
+//       storage: ExpoSecureStoreAdapter as any,
+//       autoRefreshToken: true,
+//       persistSession: true,
+//       detectSessionInUrl: false,
+//     },
+//   },
+// );
+
 import { createClient } from "@supabase/supabase-js";
-import { deleteItemAsync, getItemAsync, setItemAsync } from "expo-secure-store";
+import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
 
 const ExpoSecureStoreAdapter = {
   getItem: (key: string) => {
-    return getItemAsync(key);
+    if (Platform.OS === "web") {
+      if (typeof window === "undefined") return null;
+      return localStorage.getItem(key);
+    }
+    return SecureStore.getItemAsync(key);
   },
   setItem: (key: string, value: string) => {
-    if (value.length > 2048) {
-      console.warn(
-        "Value being stored in SecureStore is larger than 2048 bytes and it may not be stored successfully. In a future SDK version, this call may throw an error.",
-      );
+    if (Platform.OS === "web") {
+      if (typeof window === "undefined") return;
+      localStorage.setItem(key, value);
+      return;
     }
-    return setItemAsync(key, value);
+    return SecureStore.setItemAsync(key, value);
   },
   removeItem: (key: string) => {
-    return deleteItemAsync(key);
+    if (Platform.OS === "web") {
+      if (typeof window === "undefined") return;
+      localStorage.removeItem(key);
+      return;
+    }
+    return SecureStore.deleteItemAsync(key);
   },
 };
 
 export const supabase = createClient(
-  process.env.EXPO_PUBLIC_SUPABASE_URL ?? "",
-  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? "",
+  process.env.EXPO_PUBLIC_SUPABASE_URL!,
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY!,
   {
     auth: {
-      storage: ExpoSecureStoreAdapter as any,
+      storage: ExpoSecureStoreAdapter,
       autoRefreshToken: true,
       persistSession: true,
       detectSessionInUrl: false,
