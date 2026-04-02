@@ -31,7 +31,7 @@ export default function Interest() {
         user_id: auth?.profile.id,
         sport_id: id,
       }));
-      console.log({ payload });
+
       const { data, error } = await supabase
         .from("user_sports")
         .insert(payload);
@@ -41,6 +41,11 @@ export default function Interest() {
         return;
       }
     }
+
+    await supabase
+      .from("profiles")
+      .update({ completed_onboarding: true })
+      .eq("id", auth?.profile.id);
 
     router.push("/(protected)/(tabs)/(home)/home");
   };

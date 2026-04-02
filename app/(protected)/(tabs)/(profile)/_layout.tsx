@@ -1,8 +1,8 @@
 import { useAuthContext } from "@/hooks/use-auth-context";
 import { Redirect, Stack } from "expo-router";
 
-export default function ProtectedLayout() {
-  const { isLoggedIn, isLoading, profile } = useAuthContext();
+export default function ProfileLayout() {
+  const { isLoggedIn, isLoading } = useAuthContext();
 
   // ⏳ Wait until auth state is ready
   if (isLoading) {
@@ -14,14 +14,9 @@ export default function ProtectedLayout() {
     return <Redirect href="/(auth)/login" />;
   }
 
-  if (profile?.completed_onboarding === false) {
-    return <Redirect href="/(protected)/(onboarding)/get-started" />;
-  }
-
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="(onboarding)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen name="profile" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -1,18 +1,24 @@
 import { useAuthContext } from "@/hooks/use-auth-context";
-import { Redirect, Stack } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 
 export default function OnBoardingLayout() {
-  const { isLoggedIn, isLoading } = useAuthContext();
+  const { isLoggedIn, isLoading, profile } = useAuthContext();
+  const router = useRouter();
 
-  // ⏳ Wait until auth state is ready
-  if (isLoading) {
-    return null; // or a splash screen
-  }
+  // useEffect(() => {
+  //   if (isLoading) return;
 
-  // ❌ Not logged in → go to login
-  if (!isLoggedIn) {
-    return <Redirect href="/(auth)/login" />;
-  }
+  //   if (!isLoggedIn) {
+  //     router.replace("/(auth)/login");
+  //     return;
+  //   }
+
+  //   if (!profile?.completed_onboarding) {
+  //     router.replace("/(protected)/(onboarding)/get-started");
+  //   }
+  // }, []);
+
+  if (isLoading) return null;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>

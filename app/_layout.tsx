@@ -1,34 +1,28 @@
 import { useAuthContext } from "@/hooks/use-auth-context";
 import AuthProvider from "@/providers/auth-provider";
-import { Stack, useRouter } from "expo-router";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "../global.css";
 
-function RootNavigator() {
-  const { isLoggedIn, isLoading } = useAuthContext();
-  const router = useRouter();
+SplashScreen.preventAutoHideAsync();
 
-  console.log({ isLoggedIn, isLoading });
+function RootNavigator() {
+  const { isLoggedIn, isLoading, profile } = useAuthContext();
 
   useEffect(() => {
-    if (isLoading) return;
-
-    if (!isLoggedIn && isLoading) {
-      router.replace("/(auth)/login");
+    if (!isLoading) {
+      SplashScreen.hideAsync();
     }
+  }, [isLoading]);
 
-    if (isLoggedIn && !isLoading) {
-      router.replace("/(protected)/(onboarding)/get-started");
-    }
-  }, [isLoggedIn, isLoading]);
+  console.log({ isLoggedIn, isLoading, profile });
+  if (isLoading) return null;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Protected guard={isLoggedIn && !isLoading}>
-        <Stack.Screen
-          name="(protected)/(onboarding)/get-started"
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="(protected)" options={{ headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={!isLoggedIn && !isLoading}>
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />

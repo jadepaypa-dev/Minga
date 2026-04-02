@@ -1,8 +1,23 @@
+import { useAuthContext } from "@/hooks/use-auth-context";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 
 export default function GetStarted() {
   const router = useRouter();
+  const auth = useAuthContext();
+  const [checking, setChecking] = useState<any>(true);
+
+  useEffect(() => {
+    if (auth?.profile?.completed_onboarding) {
+      router.replace("/(protected)/(tabs)/(home)/home");
+    } else {
+      setChecking(false);
+    }
+  }, [auth?.profile?.completed_onboarding]);
+
+  if (checking) return null;
+
   return (
     <View className="flex-1">
       <Image

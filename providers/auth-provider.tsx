@@ -12,15 +12,12 @@ export default function AuthProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     const fetchClaims = async () => {
       setIsLoading(true);
-
       const { data, error } = await supabase.auth.getClaims();
 
-      if (error) {
-        console.error("Error fetching claims:", error);
-      }
+      if (error) console.error("Error fetching claims:", error);
 
       setClaims(data?.claims ?? null);
-      setIsLoading(false);
+      // 👇 Don't set isLoading false here — let fetchProfile do it
     };
 
     fetchClaims();
@@ -47,15 +44,15 @@ export default function AuthProvider({ children }: PropsWithChildren) {
       }
     });
 
-    // Cleanup subscription on unmount
-    return () => {
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
-  // Fetch the profile when the claims change
+  // Fetch profile when claims change
   useEffect(() => {
     const fetchProfile = async () => {
+      // 👇 Only fetch if claims is resolved (not undefined)
+      if (claims === undefined) return;
+
       setIsLoading(true);
 
       if (claims) {
@@ -70,7 +67,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         setProfile(null);
       }
 
-      setIsLoading(false);
+      setIsLoading(false); // ✅ Only set false after profile is fetched
     };
 
     fetchProfile();
