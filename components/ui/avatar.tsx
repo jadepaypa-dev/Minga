@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 
-const Avatar = ({ name }: any) => {
+const Avatar = ({ name, isProfile = false, size }: any) => {
   const getGreeting = () => {
     const hour = new Date().getHours();
     console.log({ hour });
@@ -28,14 +28,16 @@ const Avatar = ({ name }: any) => {
         <Image
           source={require("@/assets/images/default-profile.png")}
           style={{ width: "100%", height: "100%" }}
-          width={40}
-          height={40}
+          width={size ?? 40}
+          height={size ?? 40}
           resizeMode="cover"
         />
       </View>
       <View className="flex-col">
-        <Text className="text-lg text-gray-600">{greeting} 👋</Text>
-        <Text className="text-xl font-medium">{name}</Text>
+        {!isProfile && (
+          <Text className="text-lg text-gray-600">{greeting} 👋</Text>
+        )}
+        {name && <Text className="text-xl font-medium">{name}</Text>}
       </View>
     </View>
   );
