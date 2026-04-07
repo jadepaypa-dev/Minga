@@ -1,17 +1,16 @@
 import Avatar from "@/components/ui/avatar";
+import CustomInput from "@/components/ui/customInput";
 import { useAuthContext } from "@/hooks/use-auth-context";
 import { Feather } from "@expo/vector-icons";
-import {
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  TextInput,
-  View,
-} from "react-native";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
 export default function Home() {
   const { profile } = useAuthContext();
+  const router = useRouter();
+
+  const [search, setSearch] = useState<any>("");
 
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
@@ -30,30 +29,23 @@ export default function Home() {
             source={require("@/assets/images/group-photo.jpg")}
             className="h-[340px] w-full rounded-3xl shadow-lg"
           />
-
-          {/* Search bar */}
-          <View className="absolute top-4 left-0 right-0 px-2">
-            <TextInput
+          <View className="absolute top-4 left-0 right-0 px-4">
+            <CustomInput
+              value={search}
+              onChange={(val: any) => setSearch(val)}
+              prefixIcon={<Feather name="search" size={20} color="black" />}
+              suffixIcon={
+                <Feather
+                  name="sliders"
+                  size={20}
+                  color="black"
+                  className="rotate-90"
+                />
+              }
               placeholder="What game are you into?"
-              className="w-full border border-gray-300 rounded-full px-4 py-3 text-base text-black bg-white pl-12 shadow-md"
-              placeholderTextColor="#878d99"
-            />
-            <Feather
-              name="search"
-              size={20}
-              color="black"
-              style={{ position: "absolute", left: 20, top: 12 }}
-            />
-            <Feather
-              name="sliders"
-              size={20}
-              color="black"
-              className="rotate-90"
-              style={{ position: "absolute", right: 25, top: 12 }}
             />
           </View>
 
-          {/* Bottom content */}
           <View className="absolute bottom-6 left-0 right-0 items-center px-4">
             <View className="items-center mb-4">
               <Text className="text-[2.2rem] text-white font-bold text-center">
@@ -64,7 +56,10 @@ export default function Home() {
               </Text>
             </View>
 
-            <Pressable className="px-5 py-3 shadow-lg rounded-full bg-green-900">
+            <Pressable
+              onPress={() => router.push("/lists")}
+              className="px-5 py-3 shadow-lg rounded-full bg-green-900"
+            >
               <Text className="text-white">Explore Now</Text>
             </Pressable>
           </View>

@@ -4,7 +4,7 @@ import { Image, Text, View } from "react-native";
 const Avatar = ({ name, isProfile = false, size }: any) => {
   const getGreeting = () => {
     const hour = new Date().getHours();
-    console.log({ hour });
+
     if (hour < 12) {
       return "Good Morning!";
     }
@@ -35,7 +35,7 @@ const Avatar = ({ name, isProfile = false, size }: any) => {
       </View>
       <View className="flex-col">
         {!isProfile && (
-          <Text className="text-lg text-gray-600">{greeting} 👋</Text>
+          <Text className="text-md text-gray-600">{greeting} 👋</Text>
         )}
         {name && <Text className="text-xl font-medium">{name}</Text>}
       </View>
