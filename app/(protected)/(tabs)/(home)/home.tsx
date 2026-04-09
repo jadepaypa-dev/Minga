@@ -1,5 +1,6 @@
 import Avatar from "@/components/ui/avatar";
 import CustomInput from "@/components/ui/customInput";
+import { getGreeting } from "@/helpers/helper";
 import { useAuthContext } from "@/hooks/use-auth-context";
 import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -15,11 +16,17 @@ export default function Home() {
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
       <View
-        className="flex-1 flex-col gap-5 px-5 py-12"
-        style={{ backgroundColor: "#f5f9fa" }}
+        className="flex-1 flex-col gap-5 px-5 py-10"
+        style={{ backgroundColor: "#ffffff" }}
       >
         <View className="flex-row items-center justify-between">
-          <Avatar name={profile?.full_name} />
+          <View className="flex-row gap-5">
+            <Avatar name={profile?.full_name} />
+            <View>
+              <Text>{getGreeting()}</Text>
+              <Text>{profile?.full_name}</Text>
+            </View>
+          </View>
           <View className="bg-white rounded-full p-4">
             <Feather name="bell" size={18} color="black" />
           </View>
@@ -95,8 +102,8 @@ export default function Home() {
                   Pasingot sa hapon open to all Pasingot sa hapon open to all
                   Pasingot sa hapon open to all
                 </Text>
-                <View className="flex-row items-center w-full gap-1">
-                  <Avatar isProfile={true} size={30} />
+                <View className="flex-row items-center w-full gap-5">
+                  <Avatar size={30} />
                   <View className="flex-1 flex-col">
                     <View className="flex-row items-center gap-1">
                       <Feather name="map-pin" size={14} color={"#eeba00"} />
@@ -139,7 +146,7 @@ export default function Home() {
                   Open for beginners, let's see together what nature can offer.
                 </Text>
                 <View className="flex-row items-center w-full gap-1">
-                  <Avatar isProfile={true} size={30} />
+                  <Avatar size={30} />
                   <View className="flex-1 flex-col">
                     <View className="flex-row items-center gap-1">
                       <Feather name="map-pin" size={14} color={"#eeba00"} />
@@ -195,7 +202,7 @@ export default function Home() {
                   rain.
                 </Text>
                 <View className="flex-row items-center w-full gap-1">
-                  <Avatar isProfile={true} size={30} />
+                  <Avatar size={30} />
                   <View className="flex-1 flex-col">
                     <View className="flex-row items-center gap-1">
                       <Feather name="map-pin" size={14} color={"#eeba00"} />
@@ -238,7 +245,7 @@ export default function Home() {
                   Play in a court like a professional player.
                 </Text>
                 <View className="flex-row items-center w-full gap-1">
-                  <Avatar isProfile={true} size={30} />
+                  <Avatar size={30} />
                   <View className="flex-1 flex-col">
                     <View className="flex-row items-center gap-1">
                       <Feather name="map-pin" size={14} color={"#eeba00"} />

@@ -25,7 +25,7 @@ export default function HomeLayout() {
         options={{
           title: "",
           headerStyle: {
-            backgroundColor: "#f5f9fa",
+            backgroundColor: "#ffffff",
           },
           headerShadowVisible: false,
           headerLeft: () => {
@@ -37,6 +37,12 @@ export default function HomeLayout() {
               </Pressable>
             );
           },
+        }}
+      />
+      <Stack.Screen
+        name="details"
+        options={{
+          headerShown: false,
         }}
       />
     </Stack>
