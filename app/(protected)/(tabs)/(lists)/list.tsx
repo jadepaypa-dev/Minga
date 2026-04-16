@@ -4,6 +4,7 @@ import { Feather } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { FlatList, Image, Pressable, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const events = [
   {
@@ -40,13 +41,12 @@ const events = [
   },
 ];
 
-export default function Lists() {
+export default function ListsTabScreen() {
   const router = useRouter();
-
-  const [search, setSearch] = useState<any>("");
+  const [search, setSearch] = useState("");
 
   return (
-    <View
+    <SafeAreaView
       className="flex-1 flex-col gap-5 px-6"
       style={{ backgroundColor: "#ffffff" }}
     >
@@ -55,14 +55,6 @@ export default function Lists() {
           value={search}
           onChange={(val: any) => setSearch(val)}
           prefixIcon={<Feather name="search" size={20} color="black" />}
-          // suffixIcon={
-          //   <Feather
-          //     name="sliders"
-          //     size={20}
-          //     color="black"
-          //     className="rotate-90"
-          //   />
-          // }
           placeholder="What game are you into?"
         />
       </View>
@@ -75,7 +67,7 @@ export default function Lists() {
           <Pressable
             onPress={() =>
               router.push({
-                pathname: "/details",
+                pathname: "/(protected)/(tabs)/(lists)/details",
                 params: { id: item.id },
               })
             }
@@ -124,6 +116,6 @@ export default function Lists() {
           </Pressable>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }

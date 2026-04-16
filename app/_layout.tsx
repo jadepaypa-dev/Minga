@@ -3,21 +3,35 @@ import AuthProvider from "@/providers/auth-provider";
 import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { Image, StyleSheet, View } from "react-native";
 import "../global.css";
 
-SplashScreen.preventAutoHideAsync();
+void SplashScreen.preventAutoHideAsync().catch(() => {
+  // Ignore if splash is already prevented in dev fast refresh.
+});
+
+function AppLoadingSplash() {
+  return (
+    <View style={styles.container}>
+      <Image
+        source={require("../assets/logo/minga splashscreen.png")}
+        style={styles.image}
+        resizeMode="cover"
+      />
+    </View>
+  );
+}
 
 function RootNavigator() {
   const { isLoggedIn, isLoading, profile } = useAuthContext();
 
   useEffect(() => {
     if (!isLoading) {
-      SplashScreen.hideAsync();
+      void SplashScreen.hideAsync();
     }
   }, [isLoading]);
 
-  console.log({ isLoggedIn, isLoading, profile });
-  if (isLoading) return null;
+  if (isLoading) return <AppLoadingSplash />;
 
   return (
     <Stack screenOptions={{ headerShown: false }}>
@@ -38,3 +52,14 @@ export default function RootLayout() {
     </AuthProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#ffffff",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+  },
+});

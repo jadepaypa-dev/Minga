@@ -23,14 +23,15 @@ const events = [
   },
   {
     id: "2",
-    title: "Bonita Trail",
-    sport: "Trail",
-    price: "₱150 / Person",
+    title: "Poona",
+    sport: "Badminton",
+    price: "₱300 / Hour",
     description:
-      "Open for beginners, let's see together what nature can offer and enjoy the trail safely.",
-    location: "Gaisano Grand Mall Talamban, Cebu City",
-    time: "5:00am - 3:00pm",
-    image: require("@/assets/images/events/trail-event.jpg"),
+      "Covered court with complete facilities for casual and competitive play.",
+    location: "Brgy. Pajo Lapu-Lapu City, Cebu",
+    time: "8:00am - 10:00pm",
+    type: "Court",
+    image: require("@/assets/images/courts/badminton-court.jpg"),
   },
   {
     id: "3",
@@ -42,16 +43,6 @@ const events = [
     location: "Brgy. Pajo Lapu-Lapu City, Cebu",
     time: "8:00am - 10:00pm",
     image: require("@/assets/images/courts/badminton-court.jpg"),
-  },
-  {
-    id: "4",
-    title: "Tino Restaurant",
-    sport: "Pickleball",
-    price: "₱550 / 3 Hours",
-    description: "Play in a court like a professional player.",
-    location: "Tino Restaurant Talamban, Cebu City",
-    time: "8:00am - 10:00pm",
-    image: require("@/assets/images/courts/pickleball-court.jpg"),
   },
 ];
 
@@ -87,7 +78,7 @@ export default function Details() {
           {/* Back button */}
           <Pressable
             onPress={() => router.back()}
-            className="absolute left-4 bg-white/90 p-2 rounded-full top-10"
+            className="absolute left-4 bg-white/90 p-2 rounded-full top-16"
           >
             <Feather name="arrow-left" size={20} color="black" />
           </Pressable>

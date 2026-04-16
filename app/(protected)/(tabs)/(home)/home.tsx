@@ -11,7 +11,21 @@ export default function Home() {
   const { profile } = useAuthContext();
   const router = useRouter();
 
-  const [search, setSearch] = useState<any>("");
+  const [search, setSearch] = useState("");
+
+  const goToList = () => {
+    router.push({
+      pathname: "/(protected)/(tabs)/(lists)/list",
+      params: search.trim() ? { search: search.trim() } : undefined,
+    });
+  };
+
+  const goToDetails = (id: string) => {
+    router.push({
+      pathname: "/(protected)/(tabs)/(lists)/details",
+      params: { id },
+    });
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
@@ -39,7 +53,7 @@ export default function Home() {
           <View className="absolute top-4 left-0 right-0 px-4">
             <CustomInput
               value={search}
-              onChange={(val: any) => setSearch(val)}
+              onChange={(val: string) => setSearch(val)}
               prefixIcon={<Feather name="search" size={20} color="black" />}
               suffixIcon={
                 <Feather
@@ -49,6 +63,8 @@ export default function Home() {
                   className="rotate-90"
                 />
               }
+              onSubmitEditing={goToList}
+              onPressSuffix={goToList}
               placeholder="What game are you into?"
             />
           </View>
@@ -64,7 +80,7 @@ export default function Home() {
             </View>
 
             <Pressable
-              onPress={() => router.push("/lists")}
+              onPress={goToList}
               className="px-5 py-3 shadow-lg rounded-full bg-green-900"
             >
               <Text className="text-white">Explore Now</Text>
@@ -74,14 +90,16 @@ export default function Home() {
         <View className="flex-col gap-3 w-full py-2">
           <View className="w-full flex-row items-center justify-between">
             <Text className="text-2xl font-semibold">Happening Now</Text>
-            <Text className="text-green-700">View all</Text>
+            <Pressable onPress={goToList}>
+              <Text className="text-green-700">View all</Text>
+            </Pressable>
           </View>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 25 }}
           >
-            <View className="flex-col w-[280px] gap-2">
+            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("1")}>
               <View className="relative w-full">
                 <Image
                   source={require("@/assets/images/events/basketball-event.jpg")}
@@ -124,8 +142,8 @@ export default function Home() {
                   </View>
                 </View>
               </View>
-            </View>
-            <View className="flex-col w-[280px] gap-2">
+            </Pressable>
+            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("2")}>
               <View className="relative w-full">
                 <Image
                   source={require("@/assets/images/events/trail-event.jpg")}
@@ -143,7 +161,7 @@ export default function Home() {
                   </Text>
                 </View>
                 <Text numberOfLines={2}>
-                  Open for beginners, let's see together what nature can offer.
+                  Open for beginners, let&apos;s see together what nature can offer.
                 </Text>
                 <View className="flex-row items-center w-full gap-1">
                   <Avatar size={30} />
@@ -167,20 +185,22 @@ export default function Home() {
                   </View>
                 </View>
               </View>
-            </View>
+            </Pressable>
           </ScrollView>
         </View>
         <View className="flex-col gap-3 w-full py-2">
           <View className="w-full flex-row items-center justify-between">
             <Text className="text-2xl font-semibold">Places to Play</Text>
-            <Text className="text-green-700">View all</Text>
+            <Pressable onPress={goToList}>
+              <Text className="text-green-700">View all</Text>
+            </Pressable>
           </View>
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 20 }}
           >
-            <View className="flex-col w-[280px] gap-2">
+            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("3")}>
               <View className="relative w-full">
                 <Image
                   source={require("@/assets/images/courts/badminton-court.jpg")}
@@ -223,8 +243,8 @@ export default function Home() {
                   </View>
                 </View>
               </View>
-            </View>
-            <View className="flex-col w-[280px] gap-2">
+            </Pressable>
+            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("4")}>
               <View className="relative w-full">
                 <Image
                   source={require("@/assets/images/courts/pickleball-court.jpg")}
@@ -266,7 +286,7 @@ export default function Home() {
                   </View>
                 </View>
               </View>
-            </View>
+            </Pressable>
           </ScrollView>
         </View>
         {/* <View className="flex-row gap-2 items-center w-full">

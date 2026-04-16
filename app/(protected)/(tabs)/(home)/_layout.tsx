@@ -21,7 +21,7 @@ export default function HomeLayout() {
     <Stack>
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen
-        name="lists"
+        name="list"
         options={{
           title: "",
           headerStyle: {
