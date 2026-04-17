@@ -36,7 +36,7 @@ export default function TabsLayout() {
         options={{
           title: "Lists",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Feather name="list" size={22} color={color} />,
+          tabBarIcon: ({ color }) => <Feather name="layers" size={22} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -51,7 +51,7 @@ export default function TabsLayout() {
               style={[
                 style,
                 {
-                  top: -25,
+                  top: -5,
                   width: 72,
                   justifyContent: "center",
                   alignItems: "center",

@@ -3,6 +3,7 @@ import CustomInput from "@/components/ui/customInput";
 import { getGreeting } from "@/helpers/helper";
 import { useAuthContext } from "@/hooks/use-auth-context";
 import { Feather } from "@expo/vector-icons";
+import AntDesign from '@expo/vector-icons/AntDesign';
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
@@ -30,7 +31,7 @@ export default function Home() {
   return (
     <ScrollView showsVerticalScrollIndicator={true}>
       <View
-        className="flex-1 flex-col gap-5 px-5 py-10"
+        className="flex-1 flex-col gap-5 px-5 py-16"
         style={{ backgroundColor: "#ffffff" }}
       >
         <View className="flex-row items-center justify-between">
@@ -41,8 +42,8 @@ export default function Home() {
               <Text>{profile?.full_name}</Text>
             </View>
           </View>
-          <View className="bg-white rounded-full p-4">
-            <Feather name="bell" size={18} color="black" />
+          <View className="bg-white rounded-full">
+          <AntDesign name="message" size={24} color="black" />
           </View>
         </View>
         <View className="relative">

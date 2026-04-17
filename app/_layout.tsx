@@ -10,7 +10,7 @@ void SplashScreen.preventAutoHideAsync().catch(() => {
   // Ignore if splash is already prevented in dev fast refresh.
 });
 
-function AppLoadingSplash() {
+export function AppLoadingSplash() {
   return (
     <View style={styles.container}>
       <Image

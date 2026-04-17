@@ -5,7 +5,7 @@ export default function CreateLayout() {
   const { isLoggedIn, isLoading } = useAuthContext();
 
   if (isLoading) {
-    return null;
+    return <AppLoadingSplash />;;
   }
 
   if (!isLoggedIn) {

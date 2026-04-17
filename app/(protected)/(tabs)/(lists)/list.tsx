@@ -50,13 +50,32 @@ export default function ListsTabScreen() {
       className="flex-1 flex-col gap-5 px-6"
       style={{ backgroundColor: "#ffffff" }}
     >
-      <View className="flex-col gap-5">
-        <CustomInput
-          value={search}
-          onChange={(val: any) => setSearch(val)}
-          prefixIcon={<Feather name="search" size={20} color="black" />}
-          placeholder="What game are you into?"
-        />
+      <View className="flex-row items-center gap-3">
+        <Pressable
+          onPress={() => router.back()}
+          className="h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gray-200 bg-white shadow-sm"
+        >
+          <Feather name="arrow-left" size={20} color="black" />
+        </Pressable>
+        <View className="min-w-0 flex-1">
+          <CustomInput
+            value={search}
+            onChange={(val: any) => setSearch(val)}
+            prefixIcon={<Feather name="search" size={20} color="black" />}
+            placeholder="What game are you into?"
+          />
+        </View>
+      </View>
+      <View className="flex-row items-center gap-3 w-full">
+        <Pressable className="bg-gray-100 shadow-lg px-4 py-1 rounded-full flex-1">
+          <Text className="text-center">All</Text>
+        </Pressable>
+        <Pressable className="bg-gray-100 shadow-lg px-4 py-1 rounded-full flex-1">
+          <Text className="text-center">Courts</Text>
+        </Pressable>
+        <Pressable className="bg-gray-100 shadow-lg px-4 py-1 rounded-full flex-1">
+          <Text className="text-center">Events</Text>
+        </Pressable>
       </View>
       <FlatList
         data={events}
@@ -90,7 +109,7 @@ export default function ListsTabScreen() {
                   </Text>
                 </View>
                 <Text numberOfLines={2}>{item?.description}</Text>
-                <View className="flex-row items-center w-full gap-1">
+                <View className="flex-row items-center w-full gap-5">
                   <Avatar size={30} />
                   <View className="flex-1 flex-col">
                     <View className="flex-row items-center gap-1">

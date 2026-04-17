@@ -1,15 +1,14 @@
 import { useAuthContext } from "@/hooks/use-auth-context";
 import { Redirect, Stack } from "expo-router";
+import { AppLoadingSplash } from "../_layout";
 
 export default function ProtectedLayout() {
   const { isLoggedIn, isLoading, profile } = useAuthContext();
 
-  // ⏳ Wait until auth state is ready
   if (isLoading) {
-    return null; // or a splash screen
+    return <AppLoadingSplash />;
   }
 
-  // ❌ Not logged in → go to login
   if (!isLoggedIn) {
     return <Redirect href="/(auth)/login" />;
   }

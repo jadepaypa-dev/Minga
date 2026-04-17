@@ -127,7 +127,7 @@ export default function CreateScreen() {
 
   return (
     <KeyboardAvoidingView
-      className="flex-1 bg-white"
+      className="flex-1 bg-white pt-12"
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <ScrollView
