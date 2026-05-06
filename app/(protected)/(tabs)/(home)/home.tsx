@@ -2,10 +2,11 @@ import Avatar from "@/components/ui/avatar";
 import CustomInput from "@/components/ui/customInput";
 import { getGreeting } from "@/helpers/helper";
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { getHomeFeed } from "@/lib/home/backend";
 import { Feather } from "@expo/vector-icons";
-import AntDesign from '@expo/vector-icons/AntDesign';
+import AntDesign from "@expo/vector-icons/AntDesign";
 import { useRouter } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
 
 export default function Home() {
@@ -13,6 +14,23 @@ export default function Home() {
   const router = useRouter();
 
   const [search, setSearch] = useState("");
+  const [happeningNow, setHappeningNow] = useState<any[]>([]);
+  const [placesToPlay, setPlacesToPlay] = useState<any[]>([]);
+
+  useEffect(() => {
+    const loadHomeFeed = async () => {
+      if (!profile?.id) return;
+      try {
+        const feed = await getHomeFeed(profile.id);
+        setHappeningNow(feed.happeningNow);
+        setPlacesToPlay(feed.placesToPlay);
+      } catch (error) {
+        console.log({ error });
+      }
+    };
+
+    loadHomeFeed();
+  }, [profile?.id]);
 
   const goToList = () => {
     router.push({
@@ -43,7 +61,7 @@ export default function Home() {
             </View>
           </View>
           <View className="bg-white rounded-full">
-          <AntDesign name="message" size={24} color="black" />
+            <AntDesign name="message" size={24} color="black" />
           </View>
         </View>
         <View className="relative">
@@ -100,93 +118,53 @@ export default function Home() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 25 }}
           >
-            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("1")}>
-              <View className="relative w-full">
-                <Image
-                  source={require("@/assets/images/events/basketball-event.jpg")}
-                  className="h-[150px] w-full rounded-3xl shadow-lg"
-                />
-                <Text className="absolute right-0 bg-green-800 text-white px-3 py-2 rounded-tr-3xl rounded-bl-3xl">
-                  ₱150 / Game
-                </Text>
-              </View>
-              <View className="w-full flex-col gap-2">
-                <View className="flex-row items-center justify-between flex-wrap">
-                  <Text className="font-semibold text-lg">Shoho-Q</Text>
-                  <Text className="text-sm bg-gray-200 px-4 py-1 rounded-full">
-                    Basketball
+            {happeningNow.map((item: any) => (
+              <Pressable
+                key={String(item.id)}
+                className="flex-col w-[280px] gap-2"
+                onPress={() => goToDetails(String(item.id))}
+              >
+                <View className="relative w-full">
+                  <Image
+                    source={require("@/assets/images/events/basketball-event.jpg")}
+                    className="h-[150px] w-full rounded-3xl shadow-lg"
+                  />
+                  <Text className="absolute right-0 bg-green-800 text-white px-3 py-2 rounded-tr-3xl rounded-bl-3xl">
+                    {`₱${Number(item?.fee ?? 0)} / Game`}
                   </Text>
                 </View>
-                <Text numberOfLines={2}>
-                  Pasingot sa hapon open to all Pasingot sa hapon open to all
-                  Pasingot sa hapon open to all
-                </Text>
-                <View className="flex-row items-center w-full gap-5">
-                  <Avatar size={30} />
-                  <View className="flex-1 flex-col">
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="map-pin" size={14} color={"#eeba00"} />
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        className="text-sm flex-1"
-                      >
-                        House of Curry, Cebu City
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="clock" size={14} color={"#11d2ce"} />
-                      <Text numberOfLines={1} className="text-sm">
-                        1:00pm - 5:00pm
-                      </Text>
+                <View className="w-full flex-col gap-2">
+                  <View className="flex-row items-center justify-between flex-wrap">
+                    <Text className="font-semibold text-lg">{item?.title}</Text>
+                    <Text className="text-sm bg-gray-200 px-4 py-1 rounded-full">
+                      {item?.sports?.name ?? item?.category ?? "General"}
+                    </Text>
+                  </View>
+                  <Text numberOfLines={2}>{item?.description}</Text>
+                  <View className="flex-row items-center w-full gap-5">
+                    <Avatar size={30} />
+                    <View className="flex-1 flex-col">
+                      <View className="flex-row items-center gap-1">
+                        <Feather name="map-pin" size={14} color={"#eeba00"} />
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                          className="text-sm flex-1"
+                        >
+                          {item?.location}
+                        </Text>
+                      </View>
+                      <View className="flex-row items-center gap-1">
+                        <Feather name="clock" size={14} color={"#11d2ce"} />
+                        <Text numberOfLines={1} className="text-sm">
+                          {item?.time_range}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            </Pressable>
-            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("2")}>
-              <View className="relative w-full">
-                <Image
-                  source={require("@/assets/images/events/trail-event.jpg")}
-                  className="h-[150px] w-full rounded-3xl shadow-lg"
-                />
-                <Text className="absolute right-0 bg-green-800 text-white px-3 py-2 rounded-tr-3xl rounded-bl-3xl">
-                  ₱150 / Person
-                </Text>
-              </View>
-              <View className="w-full flex-col gap-2">
-                <View className="flex-row items-center justify-between flex-wrap">
-                  <Text className="font-semibold text-lg">Bonita Trail</Text>
-                  <Text className="text-sm bg-gray-200 px-4 py-1 rounded-full">
-                    Trail
-                  </Text>
-                </View>
-                <Text numberOfLines={2}>
-                  Open for beginners, let&apos;s see together what nature can offer.
-                </Text>
-                <View className="flex-row items-center w-full gap-1">
-                  <Avatar size={30} />
-                  <View className="flex-1 flex-col">
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="map-pin" size={14} color={"#eeba00"} />
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        className="text-sm flex-1"
-                      >
-                        Gaisano Grand Mall Talamban, Cebu City
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="clock" size={14} color={"#11d2ce"} />
-                      <Text numberOfLines={1} className="text-sm">
-                        5:00am - 3:00pm
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
+              </Pressable>
+            ))}
           </ScrollView>
         </View>
         <View className="flex-col gap-3 w-full py-2">
@@ -201,93 +179,53 @@ export default function Home() {
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ gap: 20 }}
           >
-            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("3")}>
-              <View className="relative w-full">
-                <Image
-                  source={require("@/assets/images/courts/badminton-court.jpg")}
-                  className="h-[150px] w-full rounded-3xl shadow-lg"
-                />
-                <Text className="absolute right-0 bg-green-800 text-white px-3 py-2 rounded-tr-3xl rounded-bl-3xl">
-                  ₱300 / Hour
-                </Text>
-              </View>
-              <View className="w-full flex-col gap-2">
-                <View className="flex-row items-center justify-between flex-wrap">
-                  <Text className="font-semibold text-lg">Poona</Text>
-                  <Text className="text-sm bg-gray-200 px-4 py-1 rounded-full">
-                    Badminton
+            {placesToPlay.map((item: any) => (
+              <Pressable
+                key={String(item.id)}
+                className="flex-col w-[280px] gap-2"
+                onPress={() => goToDetails(String(item.id))}
+              >
+                <View className="relative w-full">
+                  <Image
+                    source={require("@/assets/images/courts/badminton-court.jpg")}
+                    className="h-[150px] w-full rounded-3xl shadow-lg"
+                  />
+                  <Text className="absolute right-0 bg-green-800 text-white px-3 py-2 rounded-tr-3xl rounded-bl-3xl">
+                    {`₱${Number(item?.fee ?? 0)} / Hour`}
                   </Text>
                 </View>
-                <Text numberOfLines={2}>
-                  We offer covered court so no need to worry about the heat or
-                  rain.
-                </Text>
-                <View className="flex-row items-center w-full gap-1">
-                  <Avatar size={30} />
-                  <View className="flex-1 flex-col">
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="map-pin" size={14} color={"#eeba00"} />
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        className="text-sm flex-1"
-                      >
-                        Brgy. Pajo Lapu - Lapu City, Cebu
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="clock" size={14} color={"#11d2ce"} />
-                      <Text numberOfLines={1} className="text-sm">
-                        8:00am - 10:00pm
-                      </Text>
+                <View className="w-full flex-col gap-2">
+                  <View className="flex-row items-center justify-between flex-wrap">
+                    <Text className="font-semibold text-lg">{item?.title}</Text>
+                    <Text className="text-sm bg-gray-200 px-4 py-1 rounded-full">
+                      {item?.sports?.name ?? item?.category ?? "General"}
+                    </Text>
+                  </View>
+                  <Text numberOfLines={2}>{item?.description}</Text>
+                  <View className="flex-row items-center w-full gap-1">
+                    <Avatar size={30} />
+                    <View className="flex-1 flex-col">
+                      <View className="flex-row items-center gap-1">
+                        <Feather name="map-pin" size={14} color={"#eeba00"} />
+                        <Text
+                          numberOfLines={1}
+                          ellipsizeMode="tail"
+                          className="text-sm flex-1"
+                        >
+                          {item?.location}
+                        </Text>
+                      </View>
+                      <View className="flex-row items-center gap-1">
+                        <Feather name="clock" size={14} color={"#11d2ce"} />
+                        <Text numberOfLines={1} className="text-sm">
+                          {item?.time_range}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            </Pressable>
-            <Pressable className="flex-col w-[280px] gap-2" onPress={() => goToDetails("4")}>
-              <View className="relative w-full">
-                <Image
-                  source={require("@/assets/images/courts/pickleball-court.jpg")}
-                  className="h-[150px] w-full rounded-3xl shadow-lg"
-                />
-                <Text className="absolute right-0 bg-green-800 text-white px-3 py-2 rounded-tr-3xl rounded-bl-3xl">
-                  ₱550 / 3Hours
-                </Text>
-              </View>
-              <View className="w-full flex-col gap-2">
-                <View className="flex-row items-center justify-between flex-wrap">
-                  <Text className="font-semibold text-lg">Tino Restaurant</Text>
-                  <Text className="text-sm bg-gray-200 px-4 py-1 rounded-full">
-                    Pickleball
-                  </Text>
-                </View>
-                <Text numberOfLines={2}>
-                  Play in a court like a professional player.
-                </Text>
-                <View className="flex-row items-center w-full gap-1">
-                  <Avatar size={30} />
-                  <View className="flex-1 flex-col">
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="map-pin" size={14} color={"#eeba00"} />
-                      <Text
-                        numberOfLines={1}
-                        ellipsizeMode="tail"
-                        className="text-sm flex-1"
-                      >
-                        Tino Restaurant Talamban, Cebu City
-                      </Text>
-                    </View>
-                    <View className="flex-row items-center gap-1">
-                      <Feather name="clock" size={14} color={"#11d2ce"} />
-                      <Text numberOfLines={1} className="text-sm">
-                        8:00am - 10:00pm
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
+              </Pressable>
+            ))}
           </ScrollView>
         </View>
         {/* <View className="flex-row gap-2 items-center w-full">

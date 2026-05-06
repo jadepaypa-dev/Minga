@@ -10,13 +10,15 @@ export default function TabsLayout() {
         tabBarShowLabel: true,
         tabBarActiveTintColor: "#065f46",
         tabBarInactiveTintColor: "#6b7280",
+        tabBarActiveBackgroundColor: "#f3f4f6",
+        tabBarInactiveBackgroundColor: "#ffffff",
         tabBarLabelStyle: {
           fontSize: 11,
           fontWeight: "600",
         },
         tabBarStyle: {
-          height: 70,
-          paddingBottom: 10,
+          // height: 100,
+          // paddingBottom: 50,
           backgroundColor: "#ffffff",
           borderTopColor: "#e5e7eb",
           borderRadius: 20,
@@ -28,7 +30,9 @@ export default function TabsLayout() {
         options={{
           title: "Home",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Feather name="home" size={22} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather name="home" size={22} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -36,7 +40,9 @@ export default function TabsLayout() {
         options={{
           title: "Lists",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Feather name="layers" size={22} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather name="layers" size={22} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -51,14 +57,13 @@ export default function TabsLayout() {
               style={[
                 style,
                 {
-                  top: -5,
-                  width: 72,
+                  width: 80,
                   justifyContent: "center",
                   alignItems: "center",
                 },
               ]}
             >
-              <View className="h-14 w-14 rounded-full bg-green-700 items-center justify-center">
+              <View className="h-12 w-12 rounded-full bg-green-700 items-center justify-center">
                 <Feather name="plus" size={28} color="#ffffff" />
               </View>
             </Pressable>
@@ -70,14 +75,18 @@ export default function TabsLayout() {
         options={{
           title: "Bookings",
           headerShown: false,
-          tabBarIcon: ({ color }) => <Feather name="calendar" size={22} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather name="calendar" size={22} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
         name="(profile)"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color }) => <Feather name="user" size={22} color={color} />,
+          tabBarIcon: ({ color }) => (
+            <Feather name="user" size={22} color={color} />
+          ),
         }}
       />
     </Tabs>

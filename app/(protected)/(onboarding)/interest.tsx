@@ -1,4 +1,5 @@
 import { useAuthContext } from "@/hooks/use-auth-context";
+import { completeOnboarding } from "@/lib/auth/backend";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -26,28 +27,13 @@ export default function Interest() {
   };
 
   const addUserSport = async () => {
-    if (selectedSports?.length > 0) {
-      const payload = selectedSports?.map((id: number) => ({
-        user_id: auth?.profile.id,
-        sport_id: id,
-      }));
-
-      const { data, error } = await supabase
-        .from("user_sports")
-        .insert(payload);
-
-      if (error) {
-        console.log({ error });
-        return;
-      }
+    try {
+      if (!auth?.profile?.id) return;
+      await completeOnboarding(auth.profile.id, selectedSports);
+      router.push("/(protected)/(tabs)/(home)/home");
+    } catch (error) {
+      console.log({ error });
     }
-
-    await supabase
-      .from("profiles")
-      .update({ completed_onboarding: true })
-      .eq("id", auth?.profile.id);
-
-    router.push("/(protected)/(tabs)/(home)/home");
   };
 
   useEffect(() => {

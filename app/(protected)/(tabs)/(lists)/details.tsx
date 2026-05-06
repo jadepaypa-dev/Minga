@@ -1,5 +1,7 @@
+import { getListingById } from "@/lib/lists/backend";
 import { Feather } from "@expo/vector-icons";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import {
   Image,
   Pressable,
@@ -8,43 +10,6 @@ import {
   Text,
   View,
 } from "react-native";
-
-const events = [
-  {
-    id: "1",
-    title: "Shoho-Q",
-    sport: "Basketball",
-    price: "₱150 / Game",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic, dignissimos mollitia est assumenda, officiis dolorem veritatis, quae quos ab aut dolorum facilis nihil beatae minima obcaecati excepturi. Ad, eligendi consectetur?",
-    location: "House of Curry, Cebu City",
-    time: "1:00pm - 5:00pm",
-    image: require("@/assets/images/events/basketball-event.jpg"),
-  },
-  {
-    id: "2",
-    title: "Poona",
-    sport: "Badminton",
-    price: "₱300 / Hour",
-    description:
-      "Covered court with complete facilities for casual and competitive play.",
-    location: "Brgy. Pajo Lapu-Lapu City, Cebu",
-    time: "8:00am - 10:00pm",
-    type: "Court",
-    image: require("@/assets/images/courts/badminton-court.jpg"),
-  },
-  {
-    id: "3",
-    title: "Poona",
-    sport: "Badminton",
-    price: "₱300 / Hour",
-    description:
-      "We offer covered court so no need to worry about the heat or rain.",
-    location: "Brgy. Pajo Lapu-Lapu City, Cebu",
-    time: "8:00am - 10:00pm",
-    image: require("@/assets/images/courts/badminton-court.jpg"),
-  },
-];
 
 const amenities = [
   { icon: "droplet", label: "Water" },
@@ -60,8 +25,44 @@ const amenities = [
 
 export default function Details() {
   const router = useRouter();
-  const { id } = useLocalSearchParams();
-  const selectedEvent = events.find((event) => event.id === String(id)) ?? events[0];
+  const { id, type } = useLocalSearchParams();
+  const [listing, setListing] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchListing();
+  }, [id, type]);
+
+  const fetchListing = async () => {
+    try {
+      setLoading(true);
+      const data = await getListingById(
+        String(id),
+        String(type) as "event" | "court",
+      );
+      setListing(data);
+    } catch (error) {
+      console.error("Error fetching listing:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <View className="flex-1 bg-white items-center justify-center">
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (!listing) {
+    return (
+      <View className="flex-1 bg-white items-center justify-center">
+        <Text>Listing not found</Text>
+      </View>
+    );
+  }
   return (
     <View className="flex-1 bg-white">
       <StatusBar translucent backgroundColor="transparent" />
@@ -70,7 +71,11 @@ export default function Details() {
         {/* Hero Image */}
         <View style={{ height: 320 }}>
           <Image
-            source={selectedEvent.image}
+            source={
+              listing.image_url
+                ? { uri: listing.image_url }
+                : require("@/assets/images/badminton.jpg")
+            }
             style={{ width: "100%", height: "100%" }}
             resizeMode="cover"
           />
@@ -99,7 +104,7 @@ export default function Details() {
           {/* Title Row */}
           <View className="flex-row items-center justify-between">
             <Text className="text-xl font-semibold flex-1">
-              {selectedEvent.title}
+              {listing.title}
             </Text>
             <View className="py-2 px-4 bg-green-600 rounded-full">
               <Text className="text-sm text-white">Available</Text>
@@ -107,7 +112,7 @@ export default function Details() {
           </View>
 
           <View className="flex-row">
-            <Text className="text-justify">{selectedEvent.description}</Text>
+            <Text className="text-justify">{listing.description}</Text>
           </View>
 
           {/* Amenities/Tags */}
@@ -138,10 +143,10 @@ export default function Details() {
               </Text>
               <View className="flex-row items-center justify-between mt-1">
                 <Text className="text-xl font-semibold">
-                  ₱150
+                  ₱{listing.fee}
                   <Text className="text-sm font-normal text-gray-400">
                     {" "}
-                    / hour
+                    / {listing.type === "event" ? "game" : "hour"}
                   </Text>
                 </Text>
                 <Pressable className="bg-green-800 px-5 py-2.5 rounded-full">
@@ -161,7 +166,7 @@ export default function Details() {
               <Text className="text-gray-400 text-sm">Non-refundable</Text>
               <View className="flex-row items-center justify-between mt-1">
                 <Text className="text-xl font-semibold">
-                  ₱500
+                  ₱{listing.fee * 8}
                   <Text className="text-sm font-normal text-gray-400">
                     {" "}
                     / day
